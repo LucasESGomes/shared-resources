@@ -17,7 +17,7 @@ fastify.register(cors, corsOptions);
 const limiter = rateLimit({
     max: 100, 
     timeWindow: '10 minute',
-    message : 'Too many requests, please try again later.',
+    message : 'Muitas requisições, tente novamente mais tarde!',
 });
 
 fastify.register(limiter);
