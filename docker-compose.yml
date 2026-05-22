@@ -1,0 +1,69 @@
+# Configurando os contêiners que irão rodar na aplicação
+services:
+  client:
+    build: ./client
+    container_name: sharedResources_client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    env_file:
+      - ./client/.env
+    depends_on:
+      - server
+    networks:
+      - sharedResources_network
+    restart: unless-stopped
+
+  server:
+    build: ./server
+    container_name: sharedResources_server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./server/.env
+    depends_on:
+      - database
+    networks:
+      - sharedResources_network
+    restart: unless-stopped
+
+  database:
+    image: postgres:15
+    container_name: booking_db
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  flyway:
+    image: flyway/flyway:latest
+    container_name: booking_flyway
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./sql/migrations:/flyway/sql
+    command: -url=jdbc:postgresql://database:5432/${DB_NAME} -user=${DB_USER} -password=${DB_PASSWORD} -connectRetries=60 migrate
+
+volumes:
+  postgres_data:
+
+networks:
+  sharedResources_network:
+    driver: bridge
