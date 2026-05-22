@@ -1,3 +1,4 @@
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import Fastify, { FastifyInstance } from "fastify";
 import rateLimit from "@fastify/rate-limit";
 import corsOptions from "./config/cors";
@@ -21,5 +22,17 @@ const limiter = rateLimit({
 });
 
 fastify.register(limiter);
+
+const buildApp() = {
+    const app = Fastify({ logger: true });
+
+    // Usando zod para fazer a validação de forma automática 
+    app.setSerializerCompiler(serializerCompiler);
+    app.setValidatorCompiler(validatorCompiler);
+
+    // Rotas → Schema + zod
+    
+    return app();
+}
 
 export default fastify;
