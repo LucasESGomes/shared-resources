@@ -25,7 +25,7 @@ pool.on('connect', () => {
 
 // Log de erro conexão não estabelecida
 pool.on('error', (err) => {
-    console.error('❌ Erro inesperado no cliente do Postgres', err);
+    console.error('Erro ao tentar conexão com o Postgres ', err);
     process.exit(-1);
 });
 
