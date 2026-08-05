@@ -33,7 +33,6 @@ services:
     restart: unless-stopped
 
   database:
-    build: ./booking-db
     image: postgres:15
     container_name: sharedResources_db
     restart: always
