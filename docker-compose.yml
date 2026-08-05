@@ -1,4 +1,3 @@
-# Configurando os contêiners que irão rodar na aplicação
 services:
   client:
     build: ./client
@@ -27,14 +26,16 @@ services:
     env_file:
       - ./server/.env
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
       - sharedResources_network
     restart: unless-stopped
 
   database:
+    build: ./booking-db
     image: postgres:15
-    container_name: booking_db
+    container_name: sharedResources_db
     restart: always
     env_file: .env
     environment:
@@ -50,16 +51,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-  flyway:
-    image: flyway/flyway:latest
-    container_name: booking_flyway
-    depends_on:
-      database:
-        condition: service_healthy
-    volumes:
-      - ./sql/migrations:/flyway/sql
-    command: -url=jdbc:postgresql://database:5432/${DB_NAME} -user=${DB_USER} -password=${DB_PASSWORD} -connectRetries=60 migrate
 
 volumes:
   postgres_data:

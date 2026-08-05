@@ -36,7 +36,7 @@ export function buildApp() {
     });
 
     // Rota de health check
-    app.get('/health', async (request, reply) => {
+    app.get('/health', async (request, reply) => {  
             await pool.query('SELECT 1');
             return reply.status(200).send({
                 status: 'ok',
