@@ -2,12 +2,11 @@ import Fastify, { FastifyInstance } from "fastify";
 import rateLimit from "@fastify/rate-limit";
 import corsOptions from "./config/cors";
 import cors from "@fastify/cors";
-import pool from "./config/db";
-import dotenv from "dotenv";
+import prisma from "./config/db";
+
 
 import { configDotenv } from "dotenv";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
-import { da } from "zod/locales";
 
 configDotenv();
 
@@ -35,19 +34,19 @@ export function buildApp() {
         }
     });
 
-    // Rota de health check
-    app.get('/health', async (request, reply) => {  
-            await pool.query('SELECT 1');
-            return reply.status(200).send({
-                status: 'ok',
-                database: 'conexão bem-sucedida',
-                timestamp: new Date().toISOString(),
-                uptime: process.uptime()
-            });
-        });
-
+    // Testando a conexão com o DB
+    fastify.get('./health', async (request, reply) => {
+        try {
+            await prisma.$queryRaw`SELECT 1`;
+            return { status: 'UP', database: 'PRISMA_CONNECTED' };
     
-
+        } catch (error) {
+            reply.status(500);
+            return { status: 'DOWN', error: (error as Error).message }
+        } finally {
+            prisma.close()
+        }
+    });
 
     return app;
 }
