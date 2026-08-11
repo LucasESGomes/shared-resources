@@ -4,7 +4,7 @@ const environment = process.env.NODE_ENV || "development";
 
 //Quando o código estiver hospedado colocar aqui as URL permitidas
 const productionOrigins = [
-
+    
 ]
 
 const corsOptions = {
