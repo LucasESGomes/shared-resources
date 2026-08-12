@@ -4,7 +4,7 @@ import fastify from "./src/app";
 
 dotenv.config();
 
-// Garantindo que os dados venham de forma correta
+// Validando os dados .env venham de forma correta
 const envSchema = z.object({
     PORT: z.string().transform(Number).default(5000),
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),

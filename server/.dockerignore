@@ -1,0 +1,3 @@
+# Não puxa os node_modules em base Windows
+node_modules
+npm-debug.log
