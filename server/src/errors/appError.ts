@@ -12,4 +12,23 @@ export class NotFoundError {
     ) {}
 };
 
-// Criar o restante...
+export class UnauthorizedError {
+    constructor(
+        public readonly message: string,
+        public readonly statusCode: number = 401
+    ) {}
+};
+
+export class ForbiddenError {
+    constructor(
+        public readonly message: string,
+        public readonly statusCode: number = 403
+    ) {}
+};
+
+export class ConflictError {
+    constructor(
+        public readonly message: string,
+        public readonly statusCode: number = 409
+    ) {}
+};

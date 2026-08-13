@@ -7,6 +7,7 @@ import cors from "@fastify/cors";
 import prisma from "./config/db";
 
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
+import { errorHandler } from "./errors/errorHandler";
 import { configDotenv } from "dotenv";
 
 
@@ -22,6 +23,9 @@ export function buildApp() {
 
     app.setValidatorCompiler(validatorCompiler)
     app.setSerializerCompiler(serializerCompiler)
+
+    // Tratador de erros global
+    app.setErrorHandler(errorHandler)
 
     // Configurando o limite de requisições
     app.register(RateLimit, {
