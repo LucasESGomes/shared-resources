@@ -3,8 +3,8 @@ import Fastify, { FastifyInstance } from "fastify";
 import RateLimit from "@fastify/rate-limit";
 import corsOptions from "./config/cors";
 
+import prismaPlugin from "./plugins/prisma.plugin";
 import cors from "@fastify/cors";
-import prisma from "./config/db";
 
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import { errorHandler } from "./errors/errorHandler";
@@ -27,6 +27,9 @@ export function buildApp() {
     // Tratador de erros global
     app.setErrorHandler(errorHandler)
 
+    // Confirando plugin Prisma Global
+    app.register(prismaPlugin);
+
     // Configurando o limite de requisições
     app.register(RateLimit, {
         max: 100, 
@@ -41,9 +44,9 @@ export function buildApp() {
     });
 
     // Testando a conexão com o DB via Prisma
-    fastify.get('./health', async (req: FastifyRequest, reply: FastifyReply) => {
+    app.get('/health', async (request, reply) => {
         try {
-            await prisma.$queryRaw`SELECT 1`;
+            await app.prisma.$queryRaw`SELECT 1`;
             return reply.status(200).send({ status: 'UP', database: 'conectado', timeStamp: new Date().toISOString() });
     
         } catch (error) {
