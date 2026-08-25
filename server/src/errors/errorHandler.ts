@@ -68,3 +68,5 @@ export function errorHandler(
         message: 'Erro interno do servidor'
     })
 }
+
+export { AppError };
