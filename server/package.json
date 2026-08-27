@@ -21,9 +21,9 @@
     "nodemon": "^3.1.14",
     "prisma": "^7.9.1",
     "ts-node": "^10.9.2",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.3"
   },
   "scripts": {
-    "dev": "nodemon --watch src ts --exec ts-node src/app.ts"
+    "dev": "nodemon --watch src --exec ts-node server.ts"
   }
 }

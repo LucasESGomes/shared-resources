@@ -1,7 +1,7 @@
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "booking";
 
-CREATE TYPE resource_status AS ENUM ('available', 'unavailable');
+CREATE TYPE resource_status AS ENUM ('active', 'inactive');
 
 CREATE TYPE reservation_status AS ENUM ('active', 'inactive');
 
@@ -46,7 +46,7 @@ CREATE TABLE "booking"."resources" (
     "quantity" INTEGER NOT NULL,
     "type" resources_type DEFAULT 'room'::resources_type,
     "location" TEXT,
-    "status" resource_status DEFAULT 'available'::resource_status,
+    "status" resource_status DEFAULT 'active'::resource_status,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
 
