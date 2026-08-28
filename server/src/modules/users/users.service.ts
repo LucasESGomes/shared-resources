@@ -5,7 +5,7 @@ import { FastifyBaseLogger } from "fastify";
 import { ConflictError } from "../../errors/appError";
 
 
-class UserService {
+class UsersService {
 
     async create(
         data: CreateUserDTO,
@@ -67,7 +67,7 @@ class UserService {
                 data: {
                     name: "Root Admin",
                     email: rootEmail,
-                    password_hash: rootPassword,
+                    password_hash: hashedPassword,
                     role: "admin"
                 }
             });
@@ -82,4 +82,4 @@ class UserService {
 
 }
 
-export default new UserService();
+export default new UsersService();

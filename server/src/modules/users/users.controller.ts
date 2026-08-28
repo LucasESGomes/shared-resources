@@ -1,30 +1,40 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { createUserSchema } from "./users.schema";
 import { AppError } from "../../errors/appError";
-import { FastifyBaseLogger } from "fastify";
 import usersService from "./users.service";
 
 
-export async function createUserController(
-    request: FastifyRequest, 
-    reply: FastifyReply, 
-    logger: FastifyBaseLogger
-) {
-    try {
-        const data = createUserSchema.parse(request.body);
+class UserController {
 
-        // Instânciando o prisma para fastify
-        const prisma = request.server.prisma;
+    async createUser(
+        request: FastifyRequest,
+        reply: FastifyReply,
+    ) {
+        try {
+            const data = createUserSchema.parse(request.body);
 
-        const newUser = usersService.create(data, prisma);
+            // Instânciando o prisma para fastify
+            const prisma = request.server.prisma;
 
-        return reply.status(201).send({
-            message: 'Usuário cadastrado com sucesso, esperando aprovação do administrador',
-            user: newUser
-            logger.info('Success user registered')
-        })
+            // Chamando a regra de negócio a ser aplicada
+            const newUser = usersService.create(data, prisma);
 
-    } catch (error) {
-        
+            return reply.status(201).send({
+                message: 'Usuário cadastrado com sucesso, esperando aprovação do administrador',
+                user: newUser
+            })
+        } catch (error) {
+            if (error instanceof AppError) {
+                return reply.status(error.statusCode).send({ error: error.message });
+            } 
+            if (error instanceof Error && error.name === 'ZodError') {
+                return reply.status(400).send({ error: JSON.parse(error.message) });
+            }  
+            throw error;
+        }
     }
+
+    // Adicionar o restante
 }
+
+export default new UserController();
