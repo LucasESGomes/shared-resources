@@ -7,13 +7,14 @@ export const createUserSchema = z.object({
         .max(100, "O nome excede o limite de caracteres."),
 
     email: z.email("Formato de e-mail inválido.")
-        .max(255, "O e-mail excede o limite de caracteres."),
+        .max(255, "O e-mail excede o limite de caracteres.")
+        .min(1, "O e-mail não pode estar vazio"),
 
     password: z.string()
         .min(6, "A senha deve conter no mínimo 6 caracteres."),
 
     role: z.enum(["user", "admin"], 
-        { message: "O cargo é 'usuário' ou 'administrador é obrigatório'." }),
+        { message: "O cargo 'usuário' ou 'administrador é obrigatório'." }),
 
     photo_url: z.url({ message: "O formato da imagem é inválido" })
         .optional()

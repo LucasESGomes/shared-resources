@@ -24,9 +24,10 @@ class UsersService {
 
         return await prisma.users.create({
             data: {
-                name: data.email,
+                name: data.name,
                 email: data.email,
                 password_hash: hashedPassword,
+
             },
             select: {
                 id: true,
