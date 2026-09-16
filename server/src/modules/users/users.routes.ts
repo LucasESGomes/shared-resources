@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify";
 import usersController from "./users.controller";
 
 export async function usersRoutes(app: FastifyInstance) {
-    // Rota inicial para criação de usuário
+    // Rota que deve ser autenticada (não é a tela inicial adiocnar a autenticação JWT)
     app.post('/', usersController.createUser)
 
     

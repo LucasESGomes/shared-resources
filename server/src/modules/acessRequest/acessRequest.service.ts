@@ -28,7 +28,7 @@ class acessRequestService {
                 name: data.name,
                 email: data.email,
                 password_hash: hashedPassword,
-                status: UserStatus.pending;
+                status: data.status = "pending",
             },
             select: {
                 id: true,
@@ -38,6 +38,14 @@ class acessRequestService {
                 role: true
             }
         });
+    }
+
+    async getAll(
+        data: UserAcessRequest,
+        prisma: PrismaClient
+    ){
+        const acessRequest = await prisma.users.findMany();
+        
     }
 }
 
