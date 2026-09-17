@@ -24,3 +24,12 @@ export const acessRequest = z.object({
 });
 
 export type UserAcessRequest = z.infer<typeof acessRequest>
+
+
+// Schema para validar atualização dos pedidos
+export const updateAcessRequest = z.object({
+    status: z.enum(["pending", "approved", "repproved"],
+        { message: "O status deve ser 'pending', 'approved' ou 'repproved'."  }),
+});
+
+export type UpdateAcessRequest = z.infer<typeof updateAcessRequest>
