@@ -59,11 +59,36 @@ class acessRequestService {
         return user;
     }
 
-    // Atualiza o status dos novos usuários
+    // Método para update da requisição do usuário
+    async update(id: string, data: UserAcessRequest, prisma: PrismaClient) {
+        await this.findById(id, prisma);
+
+        return await prisma.users.update({
+            where: { id },
+            data: { data, status: data.status = "pending"},
+            select: { id: true, name: true, email: true, isActive: true }
+        })
+    }
+
+    // Atualiza o apenas status dos novos usuários
     async updateAcessRequest(id: string, data: UpdateAcessRequest, prisma: PrismaClient ) {
         await this.findById(id, prisma);
-        
 
+        return await prisma.users.update({
+            where: { id },
+            data: { status: data.status },
+            select: { id: true, name: true, email: true, isActive: true }
+        });
+    }
+
+    async delete(id: string, prisma: PrismaClient) {
+        await this.findById(id, prisma);
+
+        await prisma.users.delete({
+            where: { id }
+        })
+
+        return { message: "Usuário removido com sucesso!" }
     }
 
 }
