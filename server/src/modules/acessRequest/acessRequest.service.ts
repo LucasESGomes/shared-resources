@@ -41,7 +41,7 @@ class acessRequestService {
     }
 
     // Busca todas as requisições de acesso
-    async getAll(data: UserAcessRequest, prisma: PrismaClient) { 
+    async findMany(prisma: PrismaClient) { 
         const acessRequest = await prisma.users.findMany();
         return acessRequest
     }

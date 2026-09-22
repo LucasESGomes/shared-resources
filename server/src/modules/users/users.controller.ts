@@ -6,6 +6,27 @@ import usersService from "./users.service";
 
 class UserController {
 
+    async createUserRootIfNotExists(request: FastifyRequest, reply: FastifyReply) {
+        try {
+            await usersService.createRootUserIfNotExists(
+                request.server.prisma,
+                request.log,
+            );
+
+            return reply.status(200).send({
+                message: 'Usuário root verificado com sucesso',
+            });
+        } catch (error) {
+            if (error instanceof AppError) {
+                return reply.status(error.statusCode).send({ error: error.message });
+            }
+
+            throw error;
+        }
+
+    }
+
+
     async createUser(
         request: FastifyRequest,
         reply: FastifyReply,

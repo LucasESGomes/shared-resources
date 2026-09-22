@@ -32,8 +32,25 @@ class acessRequestController {
 
     }
 
-    
+    async findMany(request: FastifyRequest, reply: FastifyReply){
+        try {
+            const prisma = request.server.prisma;
 
+            const acessRequests = await acessRequestService.findMany(prisma);
+
+            return reply.status(200).send({
+                message: "Dados carregados com sucesso!",
+                acessRequests: acessRequests
+            })
+        } catch (error) {
+            if (error instanceof AppError) {
+                return reply.status(error.statusCode).send({ error: error.message });
+            }
+        }
+    }
+
+
+    
 }
 
 export default new acessRequestController();
