@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import Fastify, { FastifyInstance } from "fastify";
+import Fastify from "fastify";
 import RateLimit from "@fastify/rate-limit";
 import corsOptions from "./config/cors";
 
@@ -13,16 +13,14 @@ import { configDotenv } from "dotenv";
 
 configDotenv();
 
-const fastify = Fastify();
-
-// Configurando CORS
-fastify.register(cors, corsOptions);
-
-export function buildApp() {
+export default function buildApp() {
     const app = Fastify({ logger: true });
 
     app.setValidatorCompiler(validatorCompiler)
     app.setSerializerCompiler(serializerCompiler)
+
+    // Configurando CORS
+    app.register(cors, corsOptions);
 
     // Tratador de erros global
     app.setErrorHandler(errorHandler)
@@ -59,5 +57,3 @@ export function buildApp() {
 }
 
 // registrar as rotas disponiveis
-
-export default fastify;    

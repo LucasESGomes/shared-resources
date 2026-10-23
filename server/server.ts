@@ -1,6 +1,6 @@
 import { z } from "zod";
 import dotenv from "dotenv";
-import fastify from "./src/app";
+import buildApp from "./src/app";
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ const envSchema = z.object({
 });
 
 const env = envSchema.parse(process.env);
-const app = fastify;
+const app = buildApp();
 
 const start = async () => {
     try {

@@ -1,15 +1,23 @@
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "booking";
 
-CREATE TYPE resource_status AS ENUM ('active', 'inactive');
+-- CreateEnum
+CREATE TYPE "booking"."user_status" AS ENUM ('pending', 'approved', 'reproved');
 
-CREATE TYPE reservation_status AS ENUM ('active', 'inactive');
+-- CreateEnum
+CREATE TYPE "booking"."user_is_active" AS ENUM ('active', 'inactive');
 
-CREATE TYPE resources_type AS ENUM ('room', 'equipment');
+-- CreateEnum
+CREATE TYPE "booking"."user_role" AS ENUM ('user', 'admin');
 
-CREATE TYPE user_status AS ENUM ('active', 'inactive');
+-- CreateEnum
+CREATE TYPE "booking"."resources_type" AS ENUM ('room', 'equipment');
 
-CREATE TYPE user_role AS ENUM ('user', 'admin');
+-- CreateEnum
+CREATE TYPE "booking"."reservation_status" AS ENUM ('active', 'inactive');
+
+-- CreateEnum
+CREATE TYPE "booking"."resource_status" AS ENUM ('active', 'inactive');
 
 -- CreateTable
 CREATE TABLE "booking"."refresh_tokens" (
@@ -30,7 +38,7 @@ CREATE TABLE "booking"."reservations" (
     "resource_id" UUID,
     "start_time" TIMESTAMPTZ(6) NOT NULL,
     "end_time" TIMESTAMPTZ(6) NOT NULL,
-    "status" reservation_status DEFAULT 'active'::reservation_status,
+    "status" "booking"."reservation_status" NOT NULL DEFAULT 'active',
     "quantity_reserved" INTEGER DEFAULT 1,
     "idempotency_key" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
@@ -44,9 +52,9 @@ CREATE TABLE "booking"."resources" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" VARCHAR(100) NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "type" resources_type DEFAULT 'room'::resources_type,
+    "type" "booking"."resources_type" NOT NULL DEFAULT 'room',
     "location" TEXT,
-    "status" resource_status DEFAULT 'active'::resource_status,
+    "status" "booking"."resource_status" NOT NULL DEFAULT 'active',
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
 
@@ -59,9 +67,10 @@ CREATE TABLE "booking"."users" (
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "password_hash" TEXT NOT NULL,
-    "role" user_role DEFAULT 'user'::user_role,
+    "role" "booking"."user_role" NOT NULL DEFAULT 'user',
     "photo_url" TEXT,
-    "isactive" user_status DEFAULT 'active'::user_status,
+    "status" "booking"."user_status" NOT NULL DEFAULT 'pending',
+    "isactive" "booking"."user_is_active" NOT NULL DEFAULT 'active',
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
 

@@ -8,13 +8,13 @@
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
     "fastify-type-provider-zod": "^7.0.0",
+    "@prisma/client": "^7.9.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "winston": "^3.19.0"
   },
   "devDependencies": {
-    "@prisma/client": "^7.9.1",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/node": "^26.1.2",
