@@ -64,19 +64,20 @@ class UsersService {
 
             const hashedPassword = await hashPassword(rootPassword)
 
+            logger.info('Usuário criado com sucesso.')
             return await prisma.users.create({
                 data: {
                     name: "Root Admin",
                     email: rootEmail,
                     password_hash: hashedPassword,
-                    role: "admin"
+                    role: "admin",
+                    status: "approved"
                 }
             });
-            logger.info("Usuário root criado com sucesso")
 
         } catch (error: any) {
             logger.error(`Error ao tentar criar user root ${error.message}`)
-        }
+        } 
     }
 
     // Adicionar aqui o restante dos métodos

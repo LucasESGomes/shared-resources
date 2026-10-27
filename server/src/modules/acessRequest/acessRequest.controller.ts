@@ -14,7 +14,7 @@ class acessRequestController {
 
             const prisma = request.server.prisma;
 
-            const newAcessRequest = acessRequestService.create(data, prisma);
+            const newAcessRequest = await acessRequestService.create(data, prisma);
 
             return reply.status(201).send({
                 message: 'Usuário cadastrado com sucesso, esperando aprovação do administrador',

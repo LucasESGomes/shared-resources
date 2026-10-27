@@ -38,7 +38,7 @@ class UserController {
             const prisma = request.server.prisma;
 
             // Chamando a regra de negócio a ser aplicada
-            const newUser = usersService.create(data, prisma);
+            const newUser = await usersService.create(data, prisma);
 
             return reply.status(201).send({
                 message: 'Usuário cadastrado com sucesso, esperando aprovação do administrador',
