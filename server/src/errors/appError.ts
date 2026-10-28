@@ -1,34 +1,37 @@
-export class AppError {
+// Classe base de todos os erros de negócio da aplicação
+export class AppError extends Error {
     constructor(
-        public readonly message: string,
-        public readonly statusCode: number = 400
-    ) {}
+        message: string,
+        public readonly statusCode: number = 400,
+        public readonly code: string = 'APP_ERROR'
+    ) {
+        super(message);
+        this.name = new.target.name;
+    }
 };
 
-export class NotFoundError {
-    constructor(
-        public readonly message: string,
-        public readonly statusCode: number = 404
-    ) {}
+// no throw new lá é só escrever a mensagem *para todos os métodos está assim
+
+export class NotFoundError extends AppError {
+    constructor(message: string) {
+        super(message, 404, 'NOT_FOUND_ERROR');
+    }
 };
 
-export class UnauthorizedError {
-    constructor(
-        public readonly message: string,
-        public readonly statusCode: number = 401
-    ) {}
+export class UnauthorizedError extends AppError {
+    constructor(message: string) {
+        super(message, 401, 'UNAUTHORIZED_ERROR');
+    }
 };
 
-export class ForbiddenError {
-    constructor(
-        public readonly message: string,
-        public readonly statusCode: number = 403
-    ) {}
+export class ForbiddenError extends AppError {
+    constructor(message: string) {
+        super(message, 403, 'FORBIDDEN_ERROR');
+    }
 };
 
-export class ConflictError {
-    constructor(
-        public readonly message: string,
-        public readonly statusCode: number = 409
-    ) {}
+export class ConflictError extends AppError {
+    constructor(message: string) {
+        super(message, 409, 'CONFLICT_ERROR');
+    }
 };

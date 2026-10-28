@@ -1,9 +1,8 @@
 import { UserAcessRequest, UpdateAcessRequest } from "./acessRequest.schema";
-import { ConflictError } from "../../errors/appError";
+import { ConflictError, NotFoundError } from "../../errors/appError";
 import { UserStatus } from "@prisma/client";
 import { hashPassword } from "../../utils/hash";
 import { PrismaClient } from "@prisma/client";
-import { AppError } from "../../errors/appError";
 import { FastifyBaseLogger } from "fastify";
 
 
@@ -17,7 +16,7 @@ class acessRequestService {
         });
 
         if (userExists) {
-            throw new ConflictError('Este e-mail já está em uso', 409)
+            throw new ConflictError('Este e-mail já está em uso')
         }
 
         // Configurando o hash de senha
@@ -53,7 +52,7 @@ class acessRequestService {
         });
 
         if (!user) {
-            throw new AppError('Usuário não encontrado', 404);
+            throw new NotFoundError('Usuário não encontrado');
         }
 
         return user;

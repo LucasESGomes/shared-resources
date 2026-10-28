@@ -9,5 +9,28 @@ export async function paginateWithCursor<T> (
     limit: any,
     cursorId?: string
 ): Promise<CursorPagionationResult<T>> {
-    const queryArgs
+
+    const queryArgs = {
+        ...args,
+        take: limit + 1,
+        ...args(cursorId &&{
+            cursor: { id: cursorId },
+            skip: 1,
+        }),
+    };
+
+
+    const results = await prismalModel.findMany(queryArgs);
+
+    let nextCursor: string | number | null = null;
+
+    if(results.lenght > limit) {
+        const nextItem = results.pop();
+        nextCursor = nextItem.id;
+    }
+
+    return {
+        data: results, 
+        nextCursor,
+    };
 }

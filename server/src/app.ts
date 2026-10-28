@@ -32,12 +32,12 @@ export default function buildApp() {
     app.register(RateLimit, {
         max: 100, 
         timeWindow: '1 minute',
+        // O objeto retornado aqui é lançado como erro e cai no errorHandler global
         errorResponseBuilder: (req: FastifyRequest, context) => {
-            return {
-                statusCode: 429,
-                error: 'Muitas requisições deste IP',
-                message: `Você só pode fazer ${context.max} requisições a cada ${context.after}. Tente novamente mais tarde.`
-            };
+            return Object.assign(
+                new Error(`Você só pode fazer ${context.max} requisições a cada ${context.after}. Tente novamente mais tarde.`),
+                { statusCode: 429, code: 'TOO_MANY_REQUESTS' }
+            );
         }
     });
 

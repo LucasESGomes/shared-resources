@@ -107,7 +107,7 @@ model resources {
 
 model users {
   id             String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name           String                      @db.VarChar(100)
+  name           String                      @db.VarChar(200)
   email          String                      @unique @db.VarChar(255)
   password_hash  String
   role           UserRole                    @default(user) 
